@@ -1,0 +1,14 @@
+
+docker build -f src/InventoryService.Api/Dockerfile -t inventory-service-api:local .
+
+docker run --rm -p 8080:8080 inventory-service-api:local
+http://localhost:8080/swagger
+
+in dockerfile folder --->one time check if everything runs fine
+docker run --rm -p 8080:8080 -e ASPNETCORE_ENVIRONMENT=Development inventory-service-api:local
+http://localhost:8080/swagger
+
+
+
+in docker-compose.yml folder --->
+docker compose up --build
