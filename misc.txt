@@ -12,3 +12,13 @@ http://localhost:8080/swagger
 
 in docker-compose.yml folder --->
 docker compose up --build
+
+first Migration
+
+dotnet ef migrations add InitialCreate --project src/InventoryService.Infrastructure/InventoryService.Infrastructure.csproj --startup-project src/InventoryService.Api/InventoryService.Api.csproj --context InventoryDbContext --output-dir Persistence/Migrations
+
+
+
+Migration update after  starting postgres in docker --| docker compose up -d postgres
+
+dotnet ef database update --project src/InventoryService.Infrastructure/InventoryService.Infrastructure.csproj --startup-project src/InventoryService.Api/InventoryService.Api.csproj --context InventoryDbContext
