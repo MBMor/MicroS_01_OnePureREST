@@ -46,6 +46,22 @@ public sealed class Product
 
     public DateTime UpdatedAt { get; private set; }
 
+    public void Update(
+    string name,
+    string? description,
+    decimal price,
+    int quantityInStock,
+    bool isActive,
+    DateTime updatedAt)
+    {
+        Name = NormalizeRequiredText(name, ProductConstraints.NameMaxLength, nameof(name));
+        Description = NormalizeOptionalText(description, ProductConstraints.DescriptionMaxLength, nameof(description));
+        Price = EnsureNonNegative(price, nameof(price));
+        QuantityInStock = EnsureNonNegative(quantityInStock, nameof(quantityInStock));
+        IsActive = isActive;
+        UpdatedAt = EnsureUtc(updatedAt, nameof(updatedAt));
+    }
+
     private static string NormalizeRequiredText(string value, int maxLength, string parameterName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(value, parameterName);

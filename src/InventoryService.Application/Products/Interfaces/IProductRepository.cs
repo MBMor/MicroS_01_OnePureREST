@@ -8,6 +8,8 @@ public interface IProductRepository
 {
     Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
+    Task<Product?> GetByIdForUpdateAsync(Guid id, CancellationToken cancellationToken);
+
     Task<bool> ExistsBySkuAsync(string sku, CancellationToken cancellationToken);
 
     Task<PagedResult<Product>> ListAsync(ProductListRequest request, CancellationToken cancellationToken);

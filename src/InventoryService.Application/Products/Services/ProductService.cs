@@ -13,6 +13,7 @@ public sealed class ProductService(
     IProductRepository productRepository,
     IValidator<CreateProductRequest> createProductValidator,
     IValidator<ProductListRequest> productListValidator,
+    IValidator<UpdateProductRequest> updateProductValidator,
     IClock clock) : IProductService
 {
     public async Task<ProductResponse> CreateAsync(
@@ -85,6 +86,40 @@ public sealed class ProductService(
             products.Page,
             products.PageSize,
             products.TotalCount);
+    }
+
+    public async Task<ProductResponse?> UpdateAsync(
+    Guid id,
+    UpdateProductRequest request,
+    CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        var validationResult = await updateProductValidator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
+        var product = await productRepository.GetByIdForUpdateAsync(id, cancellationToken);
+
+        if (product is null)
+        {
+            return null;
+        }
+
+        product.Update(
+            request.Name,
+            request.Description,
+            request.Price,
+            request.QuantityInStock,
+            request.IsActive,
+            clock.UtcNow);
+
+        await productRepository.SaveChangesAsync(cancellationToken);
+
+        return ToResponse(product);
     }
     private static ProductResponse ToResponse(Product product)
     {

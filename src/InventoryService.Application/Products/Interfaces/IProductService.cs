@@ -17,12 +17,12 @@ public interface IProductService
         Task<PagedResult<ProductResponse>> ListAsync(
             ProductListRequest request,
             CancellationToken cancellationToken);
-    /*
+    
         Task<ProductResponse?> UpdateAsync(
             Guid id,
             UpdateProductRequest request,
             CancellationToken cancellationToken);
-
+    /*
         Task<bool> DeactivateAsync(
             Guid id,
             CancellationToken cancellationToken);*/

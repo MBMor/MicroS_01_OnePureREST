@@ -51,4 +51,23 @@ public sealed class ProductsController(IProductService productService) : Control
 
         return Ok(products);
     }
+
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ProductResponse>> Update(
+    Guid id,
+    [FromBody] UpdateProductRequest request,
+    CancellationToken cancellationToken)
+    {
+        var product = await productService.UpdateAsync(id, request, cancellationToken);
+
+        if (product is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(product);
+    }
 }

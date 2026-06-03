@@ -17,6 +17,12 @@ public sealed class ProductRepository(InventoryDbContext dbContext) : IProductRe
             .FirstOrDefaultAsync(product => product.Id == id, cancellationToken);
     }
 
+    public Task<Product?> GetByIdForUpdateAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return dbContext.Products
+            .FirstOrDefaultAsync(product => product.Id == id, cancellationToken);
+    }
+
     public async Task<PagedResult<Product>> ListAsync(
         ProductListRequest request,
         CancellationToken cancellationToken)
