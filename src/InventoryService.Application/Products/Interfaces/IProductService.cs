@@ -13,11 +13,11 @@ public interface IProductService
     Task<ProductResponse?> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken);
-    /*
+    
         Task<PagedResult<ProductResponse>> ListAsync(
             ProductListRequest request,
             CancellationToken cancellationToken);
-
+    /*
         Task<ProductResponse?> UpdateAsync(
             Guid id,
             UpdateProductRequest request,

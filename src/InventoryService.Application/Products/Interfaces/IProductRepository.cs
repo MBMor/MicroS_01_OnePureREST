@@ -10,7 +10,7 @@ public interface IProductRepository
 
     Task<bool> ExistsBySkuAsync(string sku, CancellationToken cancellationToken);
 
-    //Task<PagedResult<Product>> ListAsync(ProductListRequest request, CancellationToken cancellationToken);
+    Task<PagedResult<Product>> ListAsync(ProductListRequest request, CancellationToken cancellationToken);
 
     Task AddAsync(Product product, CancellationToken cancellationToken);
 

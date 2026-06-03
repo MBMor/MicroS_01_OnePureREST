@@ -1,4 +1,5 @@
-﻿using InventoryService.Application.Products.Interfaces;
+﻿using InventoryService.Application.Common.Models;
+using InventoryService.Application.Products.Interfaces;
 using InventoryService.Application.Products.Requests;
 using InventoryService.Application.Products.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -37,5 +38,17 @@ public sealed class ProductsController(IProductService productService) : Control
         }
 
         return Ok(product);
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(PagedResult<ProductResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<PagedResult<ProductResponse>>> List(
+    [FromQuery] ProductListRequest request,
+    CancellationToken cancellationToken)
+    {
+        var products = await productService.ListAsync(request, cancellationToken);
+
+        return Ok(products);
     }
 }

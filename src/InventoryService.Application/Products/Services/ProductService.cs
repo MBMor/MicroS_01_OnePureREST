@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using InventoryService.Application.Common.Exceptions;
 using InventoryService.Application.Common.Interfaces;
+using InventoryService.Application.Common.Models;
 using InventoryService.Application.Products.Interfaces;
 using InventoryService.Application.Products.Requests;
 using InventoryService.Application.Products.Responses;
@@ -11,6 +12,7 @@ namespace InventoryService.Application.Products.Services;
 public sealed class ProductService(
     IProductRepository productRepository,
     IValidator<CreateProductRequest> createProductValidator,
+    IValidator<ProductListRequest> productListValidator,
     IClock clock) : IProductService
 {
     public async Task<ProductResponse> CreateAsync(
@@ -59,6 +61,31 @@ public sealed class ProductService(
             : ToResponse(product);
     }
 
+    public async Task<PagedResult<ProductResponse>> ListAsync(
+    ProductListRequest request,
+    CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        var validationResult = await productListValidator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
+        var products = await productRepository.ListAsync(request, cancellationToken);
+
+        var items = products.Items
+            .Select(ToResponse)
+            .ToArray();
+
+        return new PagedResult<ProductResponse>(
+            items,
+            products.Page,
+            products.PageSize,
+            products.TotalCount);
+    }
     private static ProductResponse ToResponse(Product product)
     {
         return new ProductResponse(

@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IValidator<CreateProductRequest>, CreateProductRequestValidator>();
+builder.Services.AddScoped<IValidator<ProductListRequest>, ProductListRequestValidator>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
