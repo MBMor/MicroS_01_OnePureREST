@@ -1,4 +1,8 @@
-﻿using InventoryService.Infrastructure.Persistence;
+﻿using InventoryService.Application.Common.Interfaces;
+using InventoryService.Application.Products.Interfaces;
+using InventoryService.Infrastructure.Persistence;
+using InventoryService.Infrastructure.Repositories;
+using InventoryService.Infrastructure.Time;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +26,9 @@ public static class DependencyInjection
         {
             options.UseNpgsql(connectionString);
         });
+
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddSingleton<IClock, SystemClock>();
 
         return services;
     }

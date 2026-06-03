@@ -9,7 +9,7 @@ public interface IProductService
     Task<ProductResponse> CreateAsync(
         CreateProductRequest request,
         CancellationToken cancellationToken);
-
+/*
     Task<ProductResponse?> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken);
@@ -25,5 +25,5 @@ public interface IProductService
 
     Task<bool> DeactivateAsync(
         Guid id,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken);*/
 }

@@ -1,8 +1,16 @@
+using FluentValidation;
+using InventoryService.Application.Products.Interfaces;
+using InventoryService.Application.Products.Requests;
+using InventoryService.Application.Products.Services;
+using InventoryService.Application.Products.Validators;
 using InventoryService.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IValidator<CreateProductRequest>, CreateProductRequestValidator>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
