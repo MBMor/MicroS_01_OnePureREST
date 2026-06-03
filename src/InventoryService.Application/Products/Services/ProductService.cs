@@ -48,6 +48,17 @@ public sealed class ProductService(
         return ToResponse(product);
     }
 
+    public async Task<ProductResponse?> GetByIdAsync(
+    Guid id,
+    CancellationToken cancellationToken)
+    {
+        var product = await productRepository.GetByIdAsync(id, cancellationToken);
+
+        return product is null
+            ? null
+            : ToResponse(product);
+    }
+
     private static ProductResponse ToResponse(Product product)
     {
         return new ProductResponse(

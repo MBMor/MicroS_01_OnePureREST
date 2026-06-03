@@ -21,4 +21,21 @@ public sealed class ProductsController(IProductService productService) : Control
 
         return Created($"/api/products/{product.Id}", product);
     }
+
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ProductResponse>> GetById(
+    Guid id,
+    CancellationToken cancellationToken)
+    {
+        var product = await productService.GetByIdAsync(id, cancellationToken);
+
+        if (product is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(product);
+    }
 }

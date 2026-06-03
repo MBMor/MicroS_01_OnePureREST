@@ -6,7 +6,7 @@ namespace InventoryService.Application.Products.Interfaces;
 
 public interface IProductRepository
 {
-    //Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
     Task<bool> ExistsBySkuAsync(string sku, CancellationToken cancellationToken);
 
