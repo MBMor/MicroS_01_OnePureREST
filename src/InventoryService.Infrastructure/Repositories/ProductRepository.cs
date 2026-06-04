@@ -1,15 +1,18 @@
-﻿using InventoryService.Application.Common.Models;
+﻿using InventoryService.Application.Common.Exceptions;
+using InventoryService.Application.Common.Models;
 using InventoryService.Application.Products.Interfaces;
 using InventoryService.Application.Products.Models;
 using InventoryService.Application.Products.Requests;
 using InventoryService.Domain.Products;
 using InventoryService.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace InventoryService.Infrastructure.Repositories;
 
 public sealed class ProductRepository(InventoryDbContext dbContext) : IProductRepository
 {
+    private const string UniqueSkuIndexName = "ux_products_sku";
     public Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return dbContext.Products
@@ -58,9 +61,23 @@ public sealed class ProductRepository(InventoryDbContext dbContext) : IProductRe
         await dbContext.Products.AddAsync(product, cancellationToken);
     }
 
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        return dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            return await dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception) when (IsUniqueSkuViolation(exception))
+        {
+            throw new DuplicateSkuException();
+        }
+    }
+
+    private static bool IsUniqueSkuViolation(DbUpdateException exception)
+    {
+        return exception.InnerException is PostgresException postgresException
+            && postgresException.SqlState == PostgresErrorCodes.UniqueViolation
+            && postgresException.ConstraintName == UniqueSkuIndexName;
     }
 
     private static IQueryable<Product> ApplyFilters(
