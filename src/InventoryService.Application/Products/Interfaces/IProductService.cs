@@ -22,8 +22,8 @@ public interface IProductService
             Guid id,
             UpdateProductRequest request,
             CancellationToken cancellationToken);
-    /*
+    
         Task<bool> DeactivateAsync(
             Guid id,
-            CancellationToken cancellationToken);*/
+            CancellationToken cancellationToken);
 }

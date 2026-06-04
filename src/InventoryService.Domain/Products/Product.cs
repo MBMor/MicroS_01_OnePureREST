@@ -62,6 +62,17 @@ public sealed class Product
         UpdatedAt = EnsureUtc(updatedAt, nameof(updatedAt));
     }
 
+    public void Deactivate(DateTime updatedAt)
+    {
+        if (!IsActive)
+        {
+            return;
+        }
+
+        IsActive = false;
+        UpdatedAt = EnsureUtc(updatedAt, nameof(updatedAt));
+    }
+
     private static string NormalizeRequiredText(string value, int maxLength, string parameterName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(value, parameterName);

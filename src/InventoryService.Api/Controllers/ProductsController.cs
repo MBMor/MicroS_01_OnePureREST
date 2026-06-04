@@ -70,4 +70,21 @@ public sealed class ProductsController(IProductService productService) : Control
 
         return Ok(product);
     }
+
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(
+    Guid id,
+    CancellationToken cancellationToken)
+    {
+        var wasDeleted = await productService.DeactivateAsync(id, cancellationToken);
+
+        if (!wasDeleted)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
 }

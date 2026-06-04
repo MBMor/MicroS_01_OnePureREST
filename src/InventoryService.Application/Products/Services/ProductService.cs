@@ -121,6 +121,24 @@ public sealed class ProductService(
 
         return ToResponse(product);
     }
+
+    public async Task<bool> DeactivateAsync(
+    Guid id,
+    CancellationToken cancellationToken)
+    {
+        var product = await productRepository.GetByIdForUpdateAsync(id, cancellationToken);
+
+        if (product is null)
+        {
+            return false;
+        }
+
+        product.Deactivate(clock.UtcNow);
+
+        await productRepository.SaveChangesAsync(cancellationToken);
+
+        return true;
+    }
     private static ProductResponse ToResponse(Product product)
     {
         return new ProductResponse(
