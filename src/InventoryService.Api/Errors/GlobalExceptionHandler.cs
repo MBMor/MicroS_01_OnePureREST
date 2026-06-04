@@ -125,11 +125,24 @@ public sealed class GlobalExceptionHandler(
     {
         problemDetails.Extensions["traceId"] = httpContext.TraceIdentifier;
 
-        return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
+        var wasWritten = await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {
             HttpContext = httpContext,
             Exception = exception,
             ProblemDetails = problemDetails
         });
+
+        if (wasWritten)
+        {
+            return true;
+        }
+
+        httpContext.Response.ContentType = "application/problem+json";
+
+        await httpContext.Response.WriteAsJsonAsync(
+            problemDetails,
+            cancellationToken: httpContext.RequestAborted);
+
+        return true;
     }
 }

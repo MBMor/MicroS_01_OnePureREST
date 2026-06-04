@@ -8,11 +8,12 @@ namespace InventoryService.Api.Controllers;
 
 [ApiController]
 [Route("api/products")]
+[Produces("application/json")]
 public sealed class ProductsController(IProductService productService) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<ProductResponse>> Create(
         [FromBody] CreateProductRequest request,
