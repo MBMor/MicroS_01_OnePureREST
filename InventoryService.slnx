@@ -5,4 +5,20 @@
     <Project Path="src/InventoryService.Domain/InventoryService.Domain.csproj" />
     <Project Path="src/InventoryService.Infrastructure/InventoryService.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/InventoryService.Tests.Unit/">
+    <Project Path="tests/InventoryService.Tests.Unit/InventoryService.Tests.Unit.csproj" />
+  </Folder>
+  <Folder Name="/tests/InventoryService.Tests.Unit/Domain/">
+    <File Path="ProductTests.cs" />
+  </Folder>
+  <Folder Name="/tests/InventoryService.Tests.Unit/Products/">
+    <File Path="CreateProductRequestValidatorTests.cs" />
+    <File Path="ProductListRequestValidatorTests.cs" />
+    <File Path="ProductServiceTests.cs" />
+  </Folder>
+  <Folder Name="/tests/InventoryService.Tests.Unit/TestDoubles/">
+    <File Path="FakeClock.cs" />
+    <File Path="FakeProductRepository.cs" />
+  </Folder>
 </Solution>
