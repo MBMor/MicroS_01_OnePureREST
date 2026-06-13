@@ -1,5 +1,6 @@
 using FluentValidation;
 using InventoryService.Api.Errors;
+using InventoryService.Api.HealthChecks;
 using InventoryService.Api.Swagger;
 using InventoryService.Application.Products.Interfaces;
 using InventoryService.Application.Products.Requests;
@@ -50,6 +51,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddInventorySwagger();
+builder.Services.AddInventoryHealthChecks();
 
 var app = builder.Build();
 
@@ -62,5 +64,6 @@ app.UseStatusCodePages();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.UseInventoryHealthChecks();
 
 app.Run();
