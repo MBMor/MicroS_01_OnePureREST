@@ -1,5 +1,6 @@
 using FluentValidation;
 using InventoryService.Api.Errors;
+using InventoryService.Api.Swagger;
 using InventoryService.Application.Products.Interfaces;
 using InventoryService.Application.Products.Requests;
 using InventoryService.Application.Products.Services;
@@ -48,18 +49,13 @@ builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddInventorySwagger();
 
 var app = builder.Build();
 
 app.UseExceptionHandler();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseInventorySwagger();
 
 app.UseStatusCodePages();
 
